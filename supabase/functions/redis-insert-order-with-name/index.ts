@@ -4,7 +4,6 @@ import { Database } from "../_shared/database.types.ts";
 
 type CheckoutItemType = {
   id: string;
-  image: string | null;
   price: number;
   quantity: number;
   color: string | null;

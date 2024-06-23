@@ -3,15 +3,18 @@ import { Redis } from "https://esm.sh/@upstash/redis";
 Deno.serve(async (req) => {
   try {
     const payload = await req.json();
-    const { id } = payload.record;
+    const { id, general_rating } = payload.record;
 
     const redis = new Redis({
       url: Deno.env.get("REDIS_URL")!,
       token: Deno.env.get("REDIS_TOKEN")!,
     });
-    console.log(redis);
 
     await redis.set(`product:${id}`, payload.record);
+    await redis.zadd("products_by_rating", {
+      score: general_rating,
+      member: `product:${id}`,
+    });
     return new Response("ok");
   } catch (error) {
     console.error(error);
