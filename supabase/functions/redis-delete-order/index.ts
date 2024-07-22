@@ -30,6 +30,11 @@ Deno.serve(async (req) => {
       item.id !== id
     );
 
+    if (newCheckout.length === 0) {
+      await redis.del(`user-checkout:${user_id}`);
+      return new Response("ok");
+    }
+
     await redis.set(`user-checkout:${user_id}`, newCheckout);
 
     return new Response("ok");
